@@ -1,9 +1,8 @@
-import h5py
-import numpy as np
 from keras.models import Model
 from keras.layers import Input, Convolution2D, LeakyReLU, Lambda, merge
 from keras import backend as K
 from keras.optimizers import Adam
+from keras.utils.io_utils import HDF5Matrix
 
 def crop_by4(x):
     shape = K.int_shape(x)
@@ -81,13 +80,13 @@ model.compile(optimizer=Adam(lr=0.00001, beta_1=0.9, beta_2=0.999),
 with open('AMNN.yaml', 'w') as fp:
     fp.write(model.to_yaml())
 
-with h5py.File('train_AMNN_data.h5') as tmp:
-    data = np.array(tmp['data'])
 
-with h5py.File('train_AMNN_label.h5') as tmp:
-    label = np.array(tmp['label'])
+train_data = HDF5Matrix('train_AMNN_data.h5', 'data', 0, 146999)
+train_label = HDF5Matrix('train_AMNN_label.h5', 'label', 0, 146999)
+test_data = HDF5Matrix('train_AMNN_data.h5', 'data', 147000, 149999)
+test_label = HDF5Matrix('train_AMNN_label.h5', 'label', 147000, 149999)
 
-hist = model.fit(data, label, batch_size=128, nb_epoch=150000, validation_split=0.02)
+hist = model.fit(train_data, train_label, 64, validation_data=[test_data, test_label], shuffle='batch')
 
 model.save_weights('AMNN_weights.h5')
 
