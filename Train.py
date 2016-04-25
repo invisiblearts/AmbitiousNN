@@ -103,7 +103,7 @@ train_label = HDF5Matrix('train_AMNN_label.h5', 'label', 0, 147000)
 test_data = HDF5Matrix('train_AMNN_data.h5', 'data', 147000, 150000)
 test_label = HDF5Matrix('train_AMNN_label.h5', 'label', 147000, 150000)
 
-hist = model.fit(train_data, train_label, batch_size=128, nb_epoch=200, validation_data=[test_data, test_label], shuffle='batch', callbacks=[ModelCheckpoint('weights.{epoch:02d}-{val_loss:.6f}.hdf5', monitor='val_loss', verbose=0, save_best_only=False, mode='auto')])
+hist = model.fit(train_data, train_label, batch_size=150, nb_epoch=200, validation_data=[test_data, test_label], shuffle='batch', callbacks=[ModelCheckpoint('weights.{epoch:02d}-{val_loss:.6f}.hdf5', monitor='val_loss', verbose=0, save_best_only=False, mode='auto')])
 
 model.save_weights('AMNN_weights.h5')
 
