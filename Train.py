@@ -34,7 +34,7 @@ def crop_by28_output_shape(input_shape):
     return tuple(shape)
 
 crop = Lambda(crop_by4, crop_by4_output_shape)
-crop_28 = Lambda(crop_by28, crop_by4_output_shape)
+crop_28 = Lambda(crop_by28, crop_by28_output_shape)
 
 
 input_data = Input(shape=(1, 136, 136), name="data")
